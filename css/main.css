@@ -445,6 +445,7 @@ body {
 }
 
 @keyframes twinkle {
+
   0%,
   100% {
     opacity: 0.25;
@@ -527,6 +528,34 @@ main {
     flex-direction: column;
     justify-content: center;
     text-align: center;
+  }
+}
+
+.hero-img-holder {
+  position: relative;
+}
+
+.hero-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hero-img-skeleton {
+  width: 60%;
+}
+
+.hero-img-hud {
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -797,6 +826,51 @@ main {
 
 .feature-item .item-number::after {
   width: 60%;
+}
+
+.feature-item::before {
+  content: "";
+  position: absolute;
+  width: 31px;
+  height: 24px;
+  background: url(../images/icons/progress-arrow.svg) no-repeat center center;
+  background-size: contain;
+  top: 50px;
+  left: 76px;
+  z-index: 0;
+  animation: moveArrow 4s linear infinite;
+}
+
+.feature-item:nth-of-type(even)::before {
+  left: auto;
+  right: 76px;
+  transform: scaleX(-1);
+}
+
+@keyframes moveArrow {
+  0% {
+    top: 50px;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    top: calc(100% - 50px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .feature-item::before {
+    display: none;
+  }
 }
 
 @media (max-width: 991px) {
