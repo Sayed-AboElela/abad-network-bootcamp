@@ -133,15 +133,13 @@ jQuery(document).ready(function ($) {
                 const item1Height = featureItems[0].offsetHeight;
                 const item1Width = featureItems[0].offsetWidth;
 
-                // Start at bottom of Course 1's curved border
+                // Start exactly where the down arrow ended
                 const startX = 90; // left border position
                 const startY = item1Height - 100;
-
-                // The border curves with 90px radius at bottom-left corner
-                // We need to follow this curve then go straight across
                 const radius = 90;
+
                 const transStart = Date.now();
-                const duration = 3000;
+                const duration = 5000; // Same speed as down animation
 
                 function animateTrans1() {
                     const elapsed = Date.now() - transStart;
@@ -149,24 +147,25 @@ jQuery(document).ready(function ($) {
 
                     let currentX, currentY;
 
-                    if (progress < 0.3) {
-                        // Phase 1: Follow the curve at bottom-left corner (0-30%)
-                        const curveProgress = progress / 0.3;
+                    if (progress < 0.25) {
+                        // Phase 1: Follow the curve at bottom-left corner (0-25%)
+                        const curveProgress = progress / 0.25;
                         const angle = curveProgress * (Math.PI / 2); // 0 to 90 degrees
-                        currentX = startX + radius - radius * Math.cos(angle);
-                        currentY = startY + radius - radius * Math.sin(angle);
+                        // Start at (startX, startY) and curve to (startX + radius, startY + radius)
+                        currentX = startX + radius * Math.sin(angle);
+                        currentY = startY + radius * (1 - Math.cos(angle));
                         transImg1.src = 'images/icons/progress-arrow-right.svg';
-                    } else if (progress < 0.7) {
-                        // Phase 2: Go straight across horizontally (30-70%)
-                        const straightProgress = (progress - 0.3) / 0.4;
+                    } else if (progress < 0.85) {
+                        // Phase 2: Go straight across horizontally (25-85%)
+                        const straightProgress = (progress - 0.25) / 0.6;
                         const straightStartX = startX + radius;
                         const straightEndX = item1Width - 90 - radius;
                         currentX = straightStartX + (straightEndX - straightStartX) * straightProgress;
                         currentY = startY + radius;
                         transImg1.src = 'images/icons/progress-arrow-right.svg';
                     } else {
-                        // Phase 3: Fade out and remove (70-100%)
-                        const fadeProgress = (progress - 0.7) / 0.3;
+                        // Phase 3: Fade out (85-100%)
+                        const fadeProgress = (progress - 0.85) / 0.15;
                         currentX = item1Width - 90 - radius;
                         currentY = startY + radius;
                         transArrow1.style.opacity = 1 - fadeProgress;
@@ -175,7 +174,7 @@ jQuery(document).ready(function ($) {
                     transArrow1.style.left = currentX + 'px';
                     transArrow1.style.top = currentY + 'px';
 
-                    if (progress < 0.7) {
+                    if (progress < 0.85) {
                         transArrow1.style.opacity = '1';
                     }
 
@@ -213,7 +212,7 @@ jQuery(document).ready(function ($) {
                     else setTimeout(() => arrow2.remove(), 100);
                 }
                 setTimeout(() => { arrow2.style.opacity = '1'; animate2(); }, 0);
-            }, 8000);
+            }, 10000);
 
             // 4. Transition 2→3: Follow curved border from Course 2 bottom to Course 3 top
             setTimeout(() => {
@@ -228,14 +227,13 @@ jQuery(document).ready(function ($) {
                 const item2Height = featureItems[1].offsetHeight;
                 const item2Width = featureItems[1].offsetWidth;
 
-                // Start at bottom of Course 2's curved right border
+                // Start exactly where the down arrow ended
                 const startX = item2Width - 90; // right border position
                 const startY = item2Height - 100;
-
-                // The border curves with 90px radius at bottom-right corner
                 const radius = 90;
+
                 const transStart = Date.now();
-                const duration = 3000;
+                const duration = 5000; // Same speed as down animation
 
                 function animateTrans2() {
                     const elapsed = Date.now() - transStart;
@@ -243,24 +241,25 @@ jQuery(document).ready(function ($) {
 
                     let currentX, currentY;
 
-                    if (progress < 0.3) {
-                        // Phase 1: Follow the curve at bottom-right corner (0-30%)
-                        const curveProgress = progress / 0.3;
+                    if (progress < 0.25) {
+                        // Phase 1: Follow the curve at bottom-right corner (0-25%)
+                        const curveProgress = progress / 0.25;
                         const angle = curveProgress * (Math.PI / 2); // 0 to 90 degrees
-                        currentX = startX - radius + radius * Math.cos(angle);
-                        currentY = startY + radius - radius * Math.sin(angle);
+                        // Start at (startX, startY) and curve to (startX - radius, startY + radius)
+                        currentX = startX - radius * Math.sin(angle);
+                        currentY = startY + radius * (1 - Math.cos(angle));
                         transImg2.src = 'images/icons/progress-arrow-left.svg';
-                    } else if (progress < 0.7) {
-                        // Phase 2: Go straight across horizontally (30-70%)
-                        const straightProgress = (progress - 0.3) / 0.4;
+                    } else if (progress < 0.85) {
+                        // Phase 2: Go straight across horizontally (25-85%)
+                        const straightProgress = (progress - 0.25) / 0.6;
                         const straightStartX = startX - radius;
                         const straightEndX = 90 + radius;
                         currentX = straightStartX + (straightEndX - straightStartX) * straightProgress;
                         currentY = startY + radius;
                         transImg2.src = 'images/icons/progress-arrow-left.svg';
                     } else {
-                        // Phase 3: Fade out and remove (70-100%)
-                        const fadeProgress = (progress - 0.7) / 0.3;
+                        // Phase 3: Fade out (85-100%)
+                        const fadeProgress = (progress - 0.85) / 0.15;
                         currentX = 90 + radius;
                         currentY = startY + radius;
                         transArrow2.style.opacity = 1 - fadeProgress;
@@ -269,7 +268,7 @@ jQuery(document).ready(function ($) {
                     transArrow2.style.left = currentX + 'px';
                     transArrow2.style.top = currentY + 'px';
 
-                    if (progress < 0.7) {
+                    if (progress < 0.85) {
                         transArrow2.style.opacity = '1';
                     }
 
@@ -280,7 +279,7 @@ jQuery(document).ready(function ($) {
                     }
                 }
                 setTimeout(() => { transArrow2.style.opacity = '1'; animateTrans2(); }, 0);
-            }, 13000);
+            }, 15000);
 
             // 5. Course 3 - Arrow DOWN on LEFT border (visual right in RTL)
             setTimeout(() => {
@@ -307,10 +306,10 @@ jQuery(document).ready(function ($) {
                     else setTimeout(() => arrow3.remove(), 100);
                 }
                 setTimeout(() => { arrow3.style.opacity = '1'; animate3(); }, 0);
-            }, 16000);
+            }, 20000);
 
-            // Loop every 22 seconds (5s + 3s + 5s + 3s + 5s + 1s buffer)
-            setTimeout(runJourney, 22000);
+            // Loop every 26 seconds (5s + 5s + 5s + 5s + 5s + 1s buffer)
+            setTimeout(runJourney, 26000);
         }
 
         runJourney();

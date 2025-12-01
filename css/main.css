@@ -549,6 +549,7 @@ main {
 
 .hero-img-hud {
   animation: rotate 20s linear infinite;
+  /* left: 48%; */
 }
 
 @keyframes rotate {
