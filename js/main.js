@@ -84,7 +84,7 @@ jQuery(document).ready(function ($) {
 
     sections.forEach((sec) => observer.observe(sec));
 
-    // Arrow Journey Animation
+    // Arrow Journey Animation - Simple and accurate
     function initArrowJourney() {
         // Only run on desktop
         if (window.innerWidth <= 991) return;
@@ -92,190 +92,239 @@ jQuery(document).ready(function ($) {
         const featureItems = document.querySelectorAll('.feature-item');
         if (featureItems.length < 3) return;
 
-        // Create arrow element that will be positioned within each item
-        function createArrow(type) {
-            const arrow = document.createElement('div');
-            arrow.className = 'journey-arrow';
-            arrow.style.cssText = 'position: absolute; width: 31px; height: 31px; opacity: 0; z-index: 1; pointer-events: none;';
-
-            const img = document.createElement('img');
-            img.src = `images/icons/progress-arrow-${type}.svg`;
-            img.style.cssText = 'width: 100%; height: 100%;';
-            arrow.appendChild(img);
-
-            return arrow;
-        }
-
-        // Animation timeline (in milliseconds)
-        const timeline = {
-            course1Down: { start: 0, duration: 3000 },
-            transition1to2: { start: 3000, duration: 1000 },
-            course2Down: { start: 4000, duration: 3000 },
-            transition2to3: { start: 7000, duration: 1000 },
-            course3Down: { start: 8000, duration: 3000 },
-            totalDuration: 12000
-        };
-
-        // Animate arrow moving down along the curved border
-        function animateArrowDown(item, arrow, isRight) {
-            // Position relative to the item, not viewport
-            const itemHeight = item.offsetHeight;
-            const startY = 50;
-            const endY = itemHeight - 80;
-            const xPos = isRight ? 'calc(60% + 90px - 76px)' : '76px'; // Position on the curved border
-
-            arrow.style[isRight ? 'right' : 'left'] = isRight ? '76px' : '76px';
-            arrow.style[isRight ? 'left' : 'right'] = 'auto';
-            arrow.style.top = startY + 'px';
-            arrow.style.opacity = '0';
-
-            setTimeout(() => { arrow.style.opacity = '1'; }, 100);
-
-            const distance = endY - startY;
-            const duration = 3000;
-            const startTime = Date.now();
-
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-
-                const currentY = startY + (distance * progress);
-                arrow.style.top = currentY + 'px';
-
-                if (progress < 0.9) {
-                    arrow.style.opacity = '1';
-                } else {
-                    arrow.style.opacity = 1 - ((progress - 0.9) / 0.1);
-                }
-
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    arrow.style.opacity = '0';
-                }
-            }
-
-            animate();
-        }
-
-        // Animate arrow transitioning horizontally between courses
-        function animateArrowTransition(fromItem, toItem, arrow) {
-            // Create transition arrow in a container that spans both items
-            const container = fromItem.parentElement;
-            const transitionArrow = document.createElement('div');
-            transitionArrow.className = 'journey-arrow-transition';
-            transitionArrow.style.cssText = 'position: absolute; width: 31px; height: 24px; opacity: 0; z-index: 1; pointer-events: none;';
-
-            const img = document.createElement('img');
-            img.src = 'images/icons/progress-arrow-right.svg';
-            img.style.cssText = 'width: 100%; height: 100%;';
-            transitionArrow.appendChild(img);
-
-            // Get positions relative to container
-            const fromRect = fromItem.getBoundingClientRect();
-            const toRect = toItem.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-
-            const fromItemIsEven = Array.from(featureItems).indexOf(fromItem) % 2 === 1;
-            const toItemIsEven = Array.from(featureItems).indexOf(toItem) % 2 === 1;
-
-            // Start position (bottom of from item, on its border side)
-            const startX = fromItemIsEven ?
-                fromRect.left - containerRect.left + 76 :
-                fromRect.right - containerRect.left - 76;
-            const startY = fromRect.bottom - containerRect.top - 60;
-
-            // End position (top of to item, on its border side)
-            const endX = toItemIsEven ?
-                toRect.left - containerRect.left + 76 :
-                toRect.right - containerRect.left - 76;
-
-            container.appendChild(transitionArrow);
-            transitionArrow.style.left = startX + 'px';
-            transitionArrow.style.top = startY + 'px';
-
-            setTimeout(() => { transitionArrow.style.opacity = '1'; }, 100);
-
-            const distance = endX - startX;
-            const duration = 1000;
-            const startTime = Date.now();
-
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-
-                const currentX = startX + (distance * progress);
-                transitionArrow.style.left = currentX + 'px';
-
-                if (progress < 0.8) {
-                    transitionArrow.style.opacity = '1';
-                } else {
-                    transitionArrow.style.opacity = 1 - ((progress - 0.8) / 0.2);
-                }
-
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    transitionArrow.remove();
-                }
-            }
-
-            animate();
-        }
-
         function runJourney() {
-            // Course 1: DOWN on RIGHT side
-            setTimeout(() => {
-                const arrow1 = createArrow('down');
-                featureItems[0].appendChild(arrow1);
-                animateArrowDown(featureItems[0], arrow1, true);
-                setTimeout(() => arrow1.remove(), 3100);
-            }, timeline.course1Down.start);
+            const container = featureItems[0].parentElement;
 
-            // Transition 1→2: HORIZONTAL
-            setTimeout(() => {
-                animateArrowTransition(featureItems[0], featureItems[1]);
-            }, timeline.transition1to2.start);
+            // 1. Course 1 - Arrow DOWN on LEFT border (visual right in RTL)
+            const arrow1 = document.createElement('div');
+            arrow1.style.cssText = 'position: absolute; left: 76px; top: 50px; width: 31px; height: 31px; opacity: 0; z-index: 1;';
+            const img1 = document.createElement('img');
+            img1.src = 'images/icons/progress-arrow-down.svg';
+            img1.style.cssText = 'width: 100%; height: 100%;';
+            arrow1.appendChild(img1);
+            featureItems[0].appendChild(arrow1);
 
-            // Course 2: DOWN on LEFT side
+            let startTime = Date.now();
+            let startY = 50;
+            let endY = featureItems[0].offsetHeight - 100;
+
+            function animate1() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / 5000, 1);
+
+                arrow1.style.top = (startY + (endY - startY) * progress) + 'px';
+                arrow1.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
+
+                if (progress < 1) requestAnimationFrame(animate1);
+                else setTimeout(() => arrow1.remove(), 100);
+            }
+            setTimeout(() => { arrow1.style.opacity = '1'; animate1(); }, 0);
+
+            // 2. Transition 1→2: Follow curved border from Course 1 bottom to Course 2 top
             setTimeout(() => {
-                const arrow2 = createArrow('down');
+                const transArrow1 = document.createElement('div');
+                transArrow1.style.cssText = 'position: absolute; width: 31px; height: 24px; opacity: 0; z-index: 1;';
+                const transImg1 = document.createElement('img');
+                transImg1.src = 'images/icons/progress-arrow-right.svg';
+                transImg1.style.cssText = 'width: 100%; height: 100%;';
+                transArrow1.appendChild(transImg1);
+                featureItems[0].appendChild(transArrow1);
+
+                const item1Height = featureItems[0].offsetHeight;
+                const item1Width = featureItems[0].offsetWidth;
+
+                // Start at bottom of Course 1's curved border
+                const startX = 90; // left border position
+                const startY = item1Height - 100;
+
+                // The border curves with 90px radius at bottom-left corner
+                // We need to follow this curve then go straight across
+                const radius = 90;
+                const transStart = Date.now();
+                const duration = 3000;
+
+                function animateTrans1() {
+                    const elapsed = Date.now() - transStart;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    let currentX, currentY;
+
+                    if (progress < 0.3) {
+                        // Phase 1: Follow the curve at bottom-left corner (0-30%)
+                        const curveProgress = progress / 0.3;
+                        const angle = curveProgress * (Math.PI / 2); // 0 to 90 degrees
+                        currentX = startX + radius - radius * Math.cos(angle);
+                        currentY = startY + radius - radius * Math.sin(angle);
+                        transImg1.src = 'images/icons/progress-arrow-right.svg';
+                    } else if (progress < 0.7) {
+                        // Phase 2: Go straight across horizontally (30-70%)
+                        const straightProgress = (progress - 0.3) / 0.4;
+                        const straightStartX = startX + radius;
+                        const straightEndX = item1Width - 90 - radius;
+                        currentX = straightStartX + (straightEndX - straightStartX) * straightProgress;
+                        currentY = startY + radius;
+                        transImg1.src = 'images/icons/progress-arrow-right.svg';
+                    } else {
+                        // Phase 3: Fade out and remove (70-100%)
+                        const fadeProgress = (progress - 0.7) / 0.3;
+                        currentX = item1Width - 90 - radius;
+                        currentY = startY + radius;
+                        transArrow1.style.opacity = 1 - fadeProgress;
+                    }
+
+                    transArrow1.style.left = currentX + 'px';
+                    transArrow1.style.top = currentY + 'px';
+
+                    if (progress < 0.7) {
+                        transArrow1.style.opacity = '1';
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateTrans1);
+                    } else {
+                        setTimeout(() => transArrow1.remove(), 100);
+                    }
+                }
+                setTimeout(() => { transArrow1.style.opacity = '1'; animateTrans1(); }, 0);
+            }, 5000);
+
+            // 3. Course 2 - Arrow DOWN on RIGHT border (visual left in RTL)
+            setTimeout(() => {
+                const arrow2 = document.createElement('div');
+                arrow2.style.cssText = 'position: absolute; right: 76px; top: 50px; width: 31px; height: 31px; opacity: 0; z-index: 1;';
+                const img2 = document.createElement('img');
+                img2.src = 'images/icons/progress-arrow-down.svg';
+                img2.style.cssText = 'width: 100%; height: 100%;';
+                arrow2.appendChild(img2);
                 featureItems[1].appendChild(arrow2);
-                animateArrowDown(featureItems[1], arrow2, false);
-                setTimeout(() => arrow2.remove(), 3100);
-            }, timeline.course2Down.start);
 
-            // Transition 2→3: HORIZONTAL
-            setTimeout(() => {
-                animateArrowTransition(featureItems[1], featureItems[2]);
-            }, timeline.transition2to3.start);
+                let start2 = Date.now();
+                let startY2 = 50;
+                let endY2 = featureItems[1].offsetHeight - 100;
 
-            // Course 3: DOWN on RIGHT side
+                function animate2() {
+                    const elapsed = Date.now() - start2;
+                    const progress = Math.min(elapsed / 5000, 1);
+
+                    arrow2.style.top = (startY2 + (endY2 - startY2) * progress) + 'px';
+                    arrow2.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
+
+                    if (progress < 1) requestAnimationFrame(animate2);
+                    else setTimeout(() => arrow2.remove(), 100);
+                }
+                setTimeout(() => { arrow2.style.opacity = '1'; animate2(); }, 0);
+            }, 8000);
+
+            // 4. Transition 2→3: Follow curved border from Course 2 bottom to Course 3 top
             setTimeout(() => {
-                const arrow3 = createArrow('down');
+                const transArrow2 = document.createElement('div');
+                transArrow2.style.cssText = 'position: absolute; width: 31px; height: 24px; opacity: 0; z-index: 1;';
+                const transImg2 = document.createElement('img');
+                transImg2.src = 'images/icons/progress-arrow-left.svg';
+                transImg2.style.cssText = 'width: 100%; height: 100%;';
+                transArrow2.appendChild(transImg2);
+                featureItems[1].appendChild(transArrow2);
+
+                const item2Height = featureItems[1].offsetHeight;
+                const item2Width = featureItems[1].offsetWidth;
+
+                // Start at bottom of Course 2's curved right border
+                const startX = item2Width - 90; // right border position
+                const startY = item2Height - 100;
+
+                // The border curves with 90px radius at bottom-right corner
+                const radius = 90;
+                const transStart = Date.now();
+                const duration = 3000;
+
+                function animateTrans2() {
+                    const elapsed = Date.now() - transStart;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    let currentX, currentY;
+
+                    if (progress < 0.3) {
+                        // Phase 1: Follow the curve at bottom-right corner (0-30%)
+                        const curveProgress = progress / 0.3;
+                        const angle = curveProgress * (Math.PI / 2); // 0 to 90 degrees
+                        currentX = startX - radius + radius * Math.cos(angle);
+                        currentY = startY + radius - radius * Math.sin(angle);
+                        transImg2.src = 'images/icons/progress-arrow-left.svg';
+                    } else if (progress < 0.7) {
+                        // Phase 2: Go straight across horizontally (30-70%)
+                        const straightProgress = (progress - 0.3) / 0.4;
+                        const straightStartX = startX - radius;
+                        const straightEndX = 90 + radius;
+                        currentX = straightStartX + (straightEndX - straightStartX) * straightProgress;
+                        currentY = startY + radius;
+                        transImg2.src = 'images/icons/progress-arrow-left.svg';
+                    } else {
+                        // Phase 3: Fade out and remove (70-100%)
+                        const fadeProgress = (progress - 0.7) / 0.3;
+                        currentX = 90 + radius;
+                        currentY = startY + radius;
+                        transArrow2.style.opacity = 1 - fadeProgress;
+                    }
+
+                    transArrow2.style.left = currentX + 'px';
+                    transArrow2.style.top = currentY + 'px';
+
+                    if (progress < 0.7) {
+                        transArrow2.style.opacity = '1';
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateTrans2);
+                    } else {
+                        setTimeout(() => transArrow2.remove(), 100);
+                    }
+                }
+                setTimeout(() => { transArrow2.style.opacity = '1'; animateTrans2(); }, 0);
+            }, 13000);
+
+            // 5. Course 3 - Arrow DOWN on LEFT border (visual right in RTL)
+            setTimeout(() => {
+                const arrow3 = document.createElement('div');
+                arrow3.style.cssText = 'position: absolute; left: 76px; top: 50px; width: 31px; height: 31px; opacity: 0; z-index: 1;';
+                const img3 = document.createElement('img');
+                img3.src = 'images/icons/progress-arrow-down.svg';
+                img3.style.cssText = 'width: 100%; height: 100%;';
+                arrow3.appendChild(img3);
                 featureItems[2].appendChild(arrow3);
-                animateArrowDown(featureItems[2], arrow3, true);
-                setTimeout(() => arrow3.remove(), 3100);
-            }, timeline.course3Down.start);
 
-            // Loop the animation
-            setTimeout(runJourney, timeline.totalDuration);
+                let start3 = Date.now();
+                let startY3 = 50;
+                let endY3 = featureItems[2].offsetHeight - 100;
+
+                function animate3() {
+                    const elapsed = Date.now() - start3;
+                    const progress = Math.min(elapsed / 5000, 1);
+
+                    arrow3.style.top = (startY3 + (endY3 - startY3) * progress) + 'px';
+                    arrow3.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
+
+                    if (progress < 1) requestAnimationFrame(animate3);
+                    else setTimeout(() => arrow3.remove(), 100);
+                }
+                setTimeout(() => { arrow3.style.opacity = '1'; animate3(); }, 0);
+            }, 16000);
+
+            // Loop every 22 seconds (5s + 3s + 5s + 3s + 5s + 1s buffer)
+            setTimeout(runJourney, 22000);
         }
 
-        // Start the journey
         runJourney();
     }
 
     // Initialize arrow journey after page load
-    setTimeout(initArrowJourney, 1000);
+    setTimeout(initArrowJourney, 1500);
 
-    // Reinitialize on window resize (if switching from mobile to desktop)
+    // Reinitialize on window resize
     let resizeTimer;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-            // Clean up any existing arrows
-            document.querySelectorAll('.journey-arrow, .journey-arrow-transition').forEach(el => el.remove());
+            document.querySelectorAll('.journey-arrow').forEach(el => el.remove());
             if (window.innerWidth > 991) {
                 initArrowJourney();
             }
