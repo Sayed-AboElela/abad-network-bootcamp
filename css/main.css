@@ -324,9 +324,23 @@ body {
       #0d0e34 0%,
       #181621 50%,
       #141324 100%);
+  background-size: 200% 200%;
   position: relative;
   overflow-x: hidden;
   width: 100%;
+  animation: gradientShift 20s ease infinite;
+}
+
+@keyframes gradientShift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .circle-pattern {
@@ -552,6 +566,19 @@ main {
   /* left: 48%; */
 }
 
+/* 
+.hero-img-earth {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  animation: floatSlow 6s ease-in-out infinite;
+} */
+
+.hero-img-skeleton {
+  animation: floatMedium 5s ease-in-out infinite;
+}
+
 @keyframes rotate {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
@@ -559,6 +586,30 @@ main {
 
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes floatSlow {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0px);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-10px);
+  }
+}
+
+@keyframes floatMedium {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0px);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-15px);
   }
 }
 
@@ -1744,7 +1795,13 @@ main {
   background-color: transparent;
   color: #fff;
   font-size: 1.5625rem;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-control:hover {
+  border-color: #df5aff;
+  box-shadow: 0 0 15px rgba(154, 32, 170, 0.3);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 767px) {
@@ -1781,9 +1838,30 @@ main {
   border-radius: .5rem;
   width: 240px;
   margin: 4rem auto 0;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 2.2rem;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(129, 41, 144, 0.4);
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 194, 14, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.submit-btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .download-btn-icon {
@@ -1794,6 +1872,12 @@ main {
 .submit-btn:hover {
   color: #812990;
   background-color: #ffc20e;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 194, 14, 0.6);
+}
+
+.submit-btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 @media (max-width: 767px) {

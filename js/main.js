@@ -330,4 +330,190 @@ jQuery(document).ready(function ($) {
         }, 250);
     });
 
+    // ===== PROFESSIONAL PAGE ANIMATIONS =====
+
+    // 1. Parallax scrolling effect - disabled to preserve hero animations
+    function initParallax() {
+        // Parallax disabled as it interferes with hero image animations
+        // and other positioned elements
+    }
+
+    // 2. Floating animation for benefit icons
+    function initFloatingIcons() {
+        const benefitIcons = document.querySelectorAll('.benefit-icon img');
+
+        benefitIcons.forEach((icon, index) => {
+            icon.style.animation = `gentleFloat ${3 + (index % 3)}s ease-in-out ${index * 0.3}s infinite`;
+        });
+
+        // Add CSS keyframe
+        if (!document.querySelector('#floatingStyles')) {
+            const style = document.createElement('style');
+            style.id = 'floatingStyles';
+            style.textContent = `
+                @keyframes gentleFloat {
+                    0%, 100% { transform: translateY(0px); }
+                    50% { transform: translateY(-8px); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    // 3. Glow effect on scroll for feature items
+    function initGlowEffects() {
+        const featureItems = document.querySelectorAll('.feature-item');
+
+        const glowObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transition = 'all 0.6s ease';
+                    entry.target.style.filter = 'drop-shadow(0 0 20px rgba(154, 32, 170, 0.3))';
+
+                    setTimeout(() => {
+                        entry.target.style.filter = 'none';
+                    }, 1500);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        featureItems.forEach(item => glowObserver.observe(item));
+    }
+
+    // 4. Timeline dots pulse animation
+    function initTimelinePulse() {
+        const timelineDots = document.querySelectorAll('.timeline-dot');
+
+        timelineDots.forEach((dot, index) => {
+            setTimeout(() => {
+                dot.style.animation = `pulse 2s ease-in-out ${index * 0.2}s infinite`;
+            }, index * 200);
+        });
+
+        if (!document.querySelector('#pulseStyles')) {
+            const style = document.createElement('style');
+            style.id = 'pulseStyles';
+            style.textContent = `
+                @keyframes pulse {
+                    0%, 100% {
+                        // box-shadow: 0 0 15px rgba(154, 32, 170, 0.8);
+                        transform: scale(1);
+                    }
+                    50% {
+                        // box-shadow: 0 0 25px rgba(154, 32, 170, 1), 0 0 40px rgba(154, 32, 170, 0.6);
+                        transform: scale(1.2);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    // 5. Smooth reveal animations on scroll
+    function initSmoothReveals() {
+        const revealElements = document.querySelectorAll('.benefit-item, .timeline-item, .details-item');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        revealElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            revealObserver.observe(el);
+        });
+    }
+
+    // 6. Interactive hover effects for course icons
+    function initInteractiveIcons() {
+        const courseIcons = document.querySelectorAll('.item-img');
+
+        courseIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', function () {
+                this.style.transform = 'scale(1.1) rotate(5deg)';
+                // this.style.boxShadow = '0 0 30px rgba(223, 90, 255, 1)';
+            });
+
+            icon.addEventListener('mouseleave', function () {
+                this.style.transform = 'scale(1) rotate(0deg)';
+                // this.style.boxShadow = '';
+            });
+        });
+    }
+
+    // 7. Animated gradient for section titles
+    function initAnimatedTitles() {
+        const sectionTitles = document.querySelectorAll('.section-title');
+
+        if (!document.querySelector('#titleGradientStyles')) {
+            const style = document.createElement('style');
+            style.id = 'titleGradientStyles';
+            style.textContent = `
+                .section-title {
+                    background: linear-gradient(90deg, #9a20aa, #df5aff, #9a20aa);
+                    background-size: 200% auto;
+                    animation: shimmer 3s linear infinite;
+                }
+
+                @keyframes shimmer {
+                    to {
+                        background-position: 200% center;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    // 8. Number counter animation for visible numbers
+    function initCounterAnimation() {
+        const numberElements = document.querySelectorAll('.item-number');
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                    entry.target.classList.add('counted');
+                    const finalNumber = entry.target.textContent;
+                    let current = 0;
+                    const increment = 1;
+                    const duration = 1000;
+                    const steps = duration / 50;
+                    const stepValue = parseInt(finalNumber) / steps;
+
+                    const counter = setInterval(() => {
+                        current += stepValue;
+                        if (current >= parseInt(finalNumber)) {
+                            entry.target.textContent = finalNumber;
+                            clearInterval(counter);
+                        } else {
+                            entry.target.textContent = Math.floor(current);
+                        }
+                    }, 50);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        numberElements.forEach(el => counterObserver.observe(el));
+    }
+
+    // Initialize all animations
+    setTimeout(() => {
+        initParallax();
+        initFloatingIcons();
+        initGlowEffects();
+        initTimelinePulse();
+        initSmoothReveals();
+        initInteractiveIcons();
+        initAnimatedTitles();
+        initCounterAnimation();
+    }, 500);
+
 });
