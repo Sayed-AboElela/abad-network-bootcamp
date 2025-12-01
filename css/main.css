@@ -543,7 +543,7 @@ main {
 }
 
 .hero-img-skeleton {
-  width: 60%;
+  width: 80%;
 }
 
 .hero-img-hud {
@@ -554,6 +554,7 @@ main {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
   }
+
   to {
     transform: translate(-50%, -50%) rotate(360deg);
   }
@@ -828,6 +829,7 @@ main {
   width: 60%;
 }
 
+/* Old arrow animations - now replaced by JavaScript journey animation */
 .feature-item::before {
   content: "";
   position: absolute;
@@ -839,6 +841,8 @@ main {
   left: 76px;
   z-index: 0;
   animation: moveArrow 4s linear infinite;
+  /* Hide when journey animation is active */
+  display: none;
 }
 
 .feature-item:nth-of-type(even)::before {
