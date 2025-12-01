@@ -408,24 +408,11 @@ body {
   background-color: #9a20aa;
 }
 
-/* 
-.section-title::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, #d875ef 28.98%, #8e349e 46.45%, #812990 49.9%, #bb5ccf 71.02%);
-  opacity: 0.3;
-  z-index: -1;
-  transition: 0.3s ease-in-out;
-} */
-
 @media (max-width: 767px) {
   .section-title {
     font-size: 1.875rem;
     padding: 0.625rem 1.875rem;
     border-radius: .5rem;
-    /* border-bottom-left-radius: 0; */
-    /* border-bottom-right-radius: 0; */
     margin-bottom: 2.5rem;
   }
 }
@@ -433,7 +420,6 @@ body {
 .download-btn {
   padding: 0 3.125rem;
   height: 5.125rem;
-  /* border-radius: 1.875rem; */
   margin-bottom: 4.375rem;
 }
 
@@ -459,7 +445,6 @@ body {
 }
 
 @keyframes twinkle {
-
   0%,
   100% {
     opacity: 0.25;
@@ -469,6 +454,10 @@ body {
     opacity: 0.1;
   }
 }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
 
 header {
   padding: 5rem 0 0;
@@ -509,6 +498,10 @@ header {
     width: 10rem;
   }
 }
+
+/* ==========================================================================
+   Main Hero Section
+   ========================================================================== */
 
 main {
   position: relative;
@@ -584,21 +577,8 @@ main {
 }
 
 .main-img {
-  /* width: 32.75rem;
-  aspect-ratio: 524/853;
-  max-width: 35%;
-  flex-shrink: 0; */
   position: relative;
   animation: float 3s ease-in-out infinite;
-}
-
-.main-img .img-holder {
-  /* position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  inset-inline-end: -6.25rem;
-  width: 64.125rem;
-  aspect-ratio: 1026/1008; */
 }
 
 @media (max-width: 991px) {
@@ -647,6 +627,10 @@ main {
     transform: translateY(0);
   }
 }
+
+/* ==========================================================================
+   Feature Items Section
+   ========================================================================== */
 
 .items-section {
   padding-bottom: 5.625rem;
@@ -724,9 +708,6 @@ main {
   margin-bottom: 1rem;
   line-height: 1.2;
   color: #ffffff;
-  /* text-align: center; */
-  /* margin-bottom: 5px; */
-  /* direction: ltr; */
 }
 
 @media (max-width: 991px) {
@@ -814,20 +795,6 @@ main {
   color: #f5bd2d;
 }
 
-.feature-item .item-number:after,
-.feature-item .item-number::before {
-  /* content: "";
-  position: absolute;
-  background-color: transparent;
-  inset-block: 0px;
-  inset-inline-end: 0;
-  border-radius: 50px;
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
-  border: 2px solid #f5bd2d;
-  border-inline-start: unset; */
-}
-
 .feature-item .item-number::after {
   width: 60%;
 }
@@ -853,15 +820,8 @@ main {
 }
 
 .feature-item .item-desc {
-  /* width: 580px; */
   margin-right: 2.5rem;
   max-width: 100%;
-}
-
-@media (max-width: 1440px) {
-  .feature-item .item-desc {
-    /* width: 590px; */
-  }
 }
 
 @media (max-width: 1199px) {
@@ -946,14 +906,6 @@ main {
 }
 
 @media (min-width: 992px) {
-  /* .feature-item:nth-of-type(even) .item-body {
-    flex-direction: row-reverse;
-  }
-
-  .feature-item:nth-of-type(even) .item-head {
-    flex-direction: row-reverse;
-  } */
-
   .feature-item:nth-of-type(even) .item-number {
     margin-inline-start: unset;
     margin-inline-end: -15px;
@@ -961,26 +913,8 @@ main {
     padding-inline-end: 46px;
   }
 
-  .feature-item:nth-of-type(even) .item-number:after,
-  .feature-item:nth-of-type(even) .item-number::before {
-    /* content: "";
-    inset-inline-start: 0;
-    inset-inline-end: unset;
-    border-radius: 50px;
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
-    border: 2px solid #f5bd2d;
-    border-inline-end: unset; */
-  }
-
   .feature-item:nth-of-type(even) .item-number::before {
     border-top: unset;
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-  .feature-item:nth-of-type(even) .item-desc {
-    /* padding-inline-start: 15.625rem; */
   }
 }
 
@@ -998,11 +932,14 @@ main {
   }
 }
 
+/* ==========================================================================
+   Timeline Section
+   ========================================================================== */
+
 .timeline-container {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  /* min-height: 100vh; */
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
@@ -1015,7 +952,7 @@ main {
   position: relative;
 }
 
-/* الخطوط العمودية */
+/* Timeline vertical lines */
 .first-timeline-column::before {
   content: "";
   position: absolute;
@@ -1073,7 +1010,7 @@ main {
   margin-bottom: 0;
 }
 
-/* النقاط */
+/* Timeline dots */
 .timeline-dot {
   position: absolute;
   right: -4px;
@@ -1096,7 +1033,6 @@ main {
   color: #9a20aa;
 }
 
-/* responsive */
 @media (max-width: 1024px) {
   .timeline-container {
     gap: 2rem;
@@ -1108,11 +1044,6 @@ main {
 }
 
 @media (max-width: 768px) {
-  .timeline-container {
-    /* flex-direction: column;
-    gap: 3rem; */
-  }
-
   .timeline-image {
     position: relative;
     left: auto;
@@ -1146,6 +1077,10 @@ main {
     margin: 0 auto;
   }
 }
+
+/* ==========================================================================
+   Benefits Section
+   ========================================================================== */
 
 .benefits-container {
   display: flex;
@@ -1214,7 +1149,6 @@ main {
 
   .timeline-container {
     flex-direction: column;
-    /* gap: 3rem; */
   }
 }
 
@@ -1238,7 +1172,6 @@ main {
   max-width: 350px;
   border-radius: 1rem;
   padding: 1.251rem;
-  /* background: linear-gradient(315deg, #0d0e34 0%, #181621 50%, #141324 100%); */
   backdrop-filter: blur(10px);
   text-align: center;
 }
@@ -1330,6 +1263,10 @@ main {
   margin-left: 5px;
 }
 
+/* ==========================================================================
+   Details & Pricing Section
+   ========================================================================== */
+
 .details-section {
   padding-bottom: 5.625rem;
 }
@@ -1346,8 +1283,6 @@ main {
   gap: 2.5rem;
 }
 
-
-
 @media (max-width: 1199px) {
   .details-content {
     flex-direction: column;
@@ -1359,7 +1294,6 @@ main {
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   gap: 1.875rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -1392,17 +1326,8 @@ main {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  /* width: 19.6875rem; */
   flex-shrink: 0;
 }
-
-/* @media (max-width: 1199px) {
-  .details-item {
-    gap: 0.9375rem;
-    width: 100%;
-    max-width: 400px;
-  }
-} */
 
 @media (max-width: 767px) {
   .details-item {
@@ -1535,7 +1460,6 @@ main {
 
 .details-price {
   display: flex;
-  /* flex-direction: column; */
   align-items: center;
   text-align: center;
   width: -moz-fit-content;
@@ -1543,8 +1467,6 @@ main {
   flex-shrink: 0;
   gap: 0.625rem;
 }
-
-
 
 @media (max-width: 480px) {
   .installments-box {
@@ -1652,6 +1574,10 @@ main {
 .price-card :first-child {
   border: none;
 }
+
+/* ==========================================================================
+   Form Section
+   ========================================================================== */
 
 .form-section {
   padding-bottom: 7.8125rem;
@@ -1783,7 +1709,6 @@ main {
 .download-btn-icon {
   transition: all 0.3s ease-in-out;
   margin-left: 1rem;
-  /* height: 50px; */
 }
 
 .submit-btn:hover {
@@ -1799,6 +1724,10 @@ main {
     margin: 30px auto 0;
   }
 }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
 
 footer {
   padding-bottom: 3.125rem;
@@ -1848,6 +1777,10 @@ footer {
     inset-inline-end: 10px;
   }
 }
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
 
 .modal {
   position: fixed;
@@ -2020,6 +1953,10 @@ footer {
   }
 }
 
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
 .benefit-icon .w-4 {
   width: 2.5rem;
 }
@@ -2040,7 +1977,10 @@ footer {
   margin-top: 1rem;
 }
 
-/* Animations */
+/* ==========================================================================
+   Animations & Transitions
+   ========================================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -2069,10 +2009,6 @@ footer {
   transition: transform 0.3s ease;
 }
 
-.feature-item:hover {
-  /* transform: translateY(-5px); */
-}
-
 .benefit-item {
   transition: all 0.3s ease;
 }
@@ -2096,7 +2032,10 @@ footer {
   transform: translateY(-2px);
 }
 
-/* Responsive Fixes */
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
 @media (max-width: 767px) {
   .main-desc-container {
     padding-inline: 1rem;
@@ -2110,7 +2049,6 @@ footer {
   .feature-item .item-body {
     flex-direction: column;
     align-items: center;
-    /* text-align: center; */
   }
 
   .feature-item .d-flex {
@@ -2126,7 +2064,6 @@ footer {
   .feature-item:after {
     left: 50%;
     transform: translateX(-50%);
-    /* width: 80%; */
   }
 }
 
