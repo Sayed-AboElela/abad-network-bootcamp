@@ -40,7 +40,7 @@ jQuery(document).ready(function ($) {
             $.ajax({
                 url: "https://bootcamp.abadnet.com/api/Camps/register-Network-camp",
                 type: "POST",
-                data: JSON.stringify(formData),   // نبعت كـ JSON
+                data: JSON.stringify(formData),
                 contentType: "application/json",
                 success: function (response) {
                     console.log("API Response:", response);
@@ -184,7 +184,8 @@ jQuery(document).ready(function ($) {
 
             function animate1() {
                 const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / 5000, 1);
+                const duration = isMobile ? 5000 : 7000; // Slower for desktop
+                const progress = Math.min(elapsed / duration, 1);
 
                 arrow1.style.top = (startY + (endY - startY) * progress) + 'px';
                 arrow1.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
@@ -195,7 +196,7 @@ jQuery(document).ready(function ($) {
             setTimeout(() => { arrow1.style.opacity = '1'; animate1(); }, 0);
 
             // 2. Transition 1→2 (Odd -> Even)
-            const transitionDelay1 = 5000;
+            const transitionDelay1 = isMobile ? 5000 : 7000;
             const t1 = setTimeout(() => {
                 const transArrow1 = document.createElement('div');
                 transArrow1.classList.add('journey-arrow');
@@ -208,57 +209,37 @@ jQuery(document).ready(function ($) {
 
                 const item1Height = featureItems[0].offsetHeight;
 
-                // Start at Odd Left Edge, End at Odd Right Edge
+                // Calculate straight-line horizontal movement (no curves)
                 let startX, endX, startY;
 
                 if (isMobile) {
-                    startX = getX(false, false) + arrowHalfWidth;
-                    endX = getX(false, true) + arrowHalfWidth;
-                    startY = item1Height - radius; // Start curve at bottom-radius
+                    // Start after left curve, end before right curve
+                    startX = getX(false, false) + arrowHalfWidth + radius;
+                    endX = getX(false, true) + arrowHalfWidth - radius;
+                    startY = item1Height - radius; // On bottom border line
                 } else {
-                    startX = 90;
-                    endX = itemWidth - 90;
-                    // Actually, let's keep desktop logic exactly as it was to be safe.
-                    startY = item1Height - 100;
+                    // Desktop
+                    startX = 90 + radius;
+                    endX = itemWidth - 90 - radius;
+                    startY = item1Height - radius;
                 }
 
                 const transStart = Date.now();
-                const duration = isMobile ? 3000 : 5000;
+                const duration = isMobile ? 5000 : 7000;
 
                 function animateTrans1() {
                     const elapsed = Date.now() - transStart;
                     const progress = Math.min(elapsed / duration, 1);
 
-                    let currentX, currentY;
+                    // Simple straight line - no curve following
+                    const currentX = startX + (endX - startX) * progress;
+                    const currentY = startY;
 
-                    if (progress < 0.25) {
-                        const curveProgress = progress / 0.25;
-                        const angle = curveProgress * (Math.PI / 2);
-                        currentX = startX + radius * Math.sin(angle);
-                        currentY = startY + radius * (1 - Math.cos(angle));
-                        transImg1.src = 'images/icons/progress-arrow-right.svg';
-                    } else if (progress < 0.85) {
-                        const straightProgress = (progress - 0.25) / 0.6;
-                        const straightStartX = startX + radius;
-                        const straightEndX = endX - radius;
-                        currentX = straightStartX + (straightEndX - straightStartX) * straightProgress;
-                        currentY = startY + radius;
-                        transImg1.src = 'images/icons/progress-arrow-right.svg';
-                    } else {
-                        const fadeProgress = (progress - 0.85) / 0.15;
-                        currentX = endX - radius;
-                        currentY = startY + radius;
-                        transArrow1.style.opacity = 1 - fadeProgress;
-                    }
-
-                    if (isMobile) transArrow1.style.left = (currentX - arrowHalfWidth) + 'px';
-                    else transArrow1.style.left = currentX + 'px';
-
-                    // Center vertically on the line
-                    // currentY is the line position. Arrow top should be currentY - halfHeight
+                    transArrow1.style.left = (currentX - arrowHalfWidth) + 'px';
                     transArrow1.style.top = (currentY - arrowHalfHeight) + 'px';
 
-                    if (progress < 0.85) transArrow1.style.opacity = '1';
+                    // Fade out in final 5%
+                    transArrow1.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
 
                     if (progress < 1) requestAnimationFrame(animateTrans1);
                     else setTimeout(() => transArrow1.remove(), 100);
@@ -268,7 +249,7 @@ jQuery(document).ready(function ($) {
             journeyTimeouts.push(t1);
 
             // 3. Course 2 (Even) - Arrow DOWN on RIGHT border
-            const arrow2Delay = isMobile ? 8000 : 10000;
+            const arrow2Delay = isMobile ? 10000 : 14000;
             const t2 = setTimeout(() => {
                 const arrow2 = document.createElement('div');
                 arrow2.classList.add('journey-arrow');
@@ -304,7 +285,8 @@ jQuery(document).ready(function ($) {
 
                 function animate2() {
                     const elapsed = Date.now() - start2;
-                    const progress = Math.min(elapsed / 5000, 1);
+                    const duration = isMobile ? 5000 : 7000; // Slower for desktop
+                    const progress = Math.min(elapsed / duration, 1);
 
                     arrow2.style.top = (startY2 + (endY2 - startY2) * progress) + 'px';
                     arrow2.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
@@ -317,70 +299,50 @@ jQuery(document).ready(function ($) {
             journeyTimeouts.push(t2);
 
             // 4. Transition 2→3 (Even -> Odd)
-            const transitionDelay2 = isMobile ? 13000 : 15000;
+            const transitionDelay2 = isMobile ? 15000 : 21000;
             const t3 = setTimeout(() => {
                 const transArrow2 = document.createElement('div');
                 transArrow2.classList.add('journey-arrow');
                 transArrow2.style.cssText = 'position: absolute; width: 31px; height: 24px; opacity: 0; z-index: 1;';
                 const transImg2 = document.createElement('img');
-                transImg2.src = isMobile ? 'images/icons/progress-arrow-left.svg' : 'images/icons/progress-arrow-left.svg';
+                transImg2.src = 'images/icons/progress-arrow-left.svg';
                 transImg2.style.cssText = 'width: 100%; height: 100%;';
                 transArrow2.appendChild(transImg2);
                 featureItems[1].appendChild(transArrow2);
 
                 const item2Height = featureItems[1].offsetHeight;
 
+                // Calculate straight-line horizontal movement (no curves)
                 let startX, endX, startY;
 
                 if (isMobile) {
-                    // Right to Left
-                    // Start at Even Right Edge, End at Even Left Edge
-                    startX = getX(true, true) + arrowHalfWidth + (itemWidth * 0.08);
-                    endX = getX(true, false) + arrowHalfWidth + (itemWidth * 0.08);
+                    // Right to Left - include even item offset
+                    startX = getX(true, true) + arrowHalfWidth + (itemWidth * 0.08) - radius;
+                    endX = getX(true, false) + arrowHalfWidth + (itemWidth * 0.08) + radius;
                     startY = item2Height - radius;
                 } else {
-                    startX = itemWidth - 90;
-                    endX = 90;
-                    startY = item2Height - 100;
+                    // Desktop: Right to Left
+                    startX = itemWidth - 90 - radius;
+                    endX = 90 + radius;
+                    startY = item2Height - radius;
                 }
 
                 const transStart = Date.now();
-                const duration = isMobile ? 3000 : 5000;
+                const duration = isMobile ? 5000 : 7000;
 
                 function animateTrans2() {
                     const elapsed = Date.now() - transStart;
                     const progress = Math.min(elapsed / duration, 1);
 
-                    let currentX, currentY;
+                    // Simple straight line - no curve following
+                    const currentX = startX + (endX - startX) * progress;
+                    const currentY = startY;
 
-                    // Unified Right-to-Left logic
-                    if (progress < 0.25) {
-                        const curveProgress = progress / 0.25;
-                        const angle = curveProgress * (Math.PI / 2);
-                        currentX = startX - radius * Math.sin(angle);
-                        currentY = startY + radius * (1 - Math.cos(angle));
-                        transImg2.src = 'images/icons/progress-arrow-left.svg';
-                    } else if (progress < 0.85) {
-                        const straightProgress = (progress - 0.25) / 0.6;
-                        const straightStartX = startX - radius;
-                        const straightEndX = endX + radius;
-                        currentX = straightStartX + (straightEndX - straightStartX) * straightProgress;
-                        currentY = startY + radius;
-                        transImg2.src = 'images/icons/progress-arrow-left.svg';
-                    } else {
-                        const fadeProgress = (progress - 0.85) / 0.15;
-                        currentX = endX + radius;
-                        currentY = startY + radius;
-                        transArrow2.style.opacity = 1 - fadeProgress;
-                    }
-
-                    if (isMobile) transArrow2.style.left = (currentX - arrowHalfWidth) + 'px';
-                    else transArrow2.style.left = currentX + 'px';
-
-                    // Center vertically on the line
+                    transArrow2.style.left = (currentX - arrowHalfWidth) + 'px';
                     transArrow2.style.top = (currentY - arrowHalfHeight) + 'px';
 
-                    if (progress < 0.85) transArrow2.style.opacity = '1';
+                    // Fade out in final 5%
+                    transArrow2.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
 
                     if (progress < 1) requestAnimationFrame(animateTrans2);
                     else setTimeout(() => transArrow2.remove(), 100);
@@ -390,7 +352,7 @@ jQuery(document).ready(function ($) {
             journeyTimeouts.push(t3);
 
             // 5. Course 3 (Odd) - Arrow DOWN on LEFT border
-            const arrow3Delay = isMobile ? 16000 : 20000;
+            const arrow3Delay = isMobile ? 20000 : 28000;
             const t4 = setTimeout(() => {
                 const arrow3 = document.createElement('div');
                 arrow3.classList.add('journey-arrow');
@@ -413,7 +375,8 @@ jQuery(document).ready(function ($) {
 
                 function animate3() {
                     const elapsed = Date.now() - start3;
-                    const progress = Math.min(elapsed / 5000, 1);
+                    const duration = isMobile ? 5000 : 7000; // Slower for desktop
+                    const progress = Math.min(elapsed / duration, 1);
 
                     arrow3.style.top = (startY3 + (endY3 - startY3) * progress) + 'px';
                     arrow3.style.opacity = progress < 0.95 ? '1' : (1 - (progress - 0.95) / 0.05);
@@ -425,7 +388,7 @@ jQuery(document).ready(function ($) {
             }, arrow3Delay);
             journeyTimeouts.push(t4);
 
-            const loopDelay = isMobile ? 22000 : 26000;
+            const loopDelay = isMobile ? 26000 : 36000;
             const tLoop = setTimeout(runJourney, loopDelay);
             journeyTimeouts.push(tLoop);
         }
