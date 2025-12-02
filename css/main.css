@@ -668,7 +668,16 @@ main {
 
 @media (max-width: 767px) {
   .main-title {
-    font-size: clamp(2rem, 8vw, 2.5rem);
+    font-size: clamp(1.2rem, 8vw, 1.6rem);
+    margin-top: 2.5rem;
+  }
+
+  .hero-img-skeleton {
+    width: 100%;
+  }
+
+  .hero-hud-container {
+    width: 90%;
   }
 }
 

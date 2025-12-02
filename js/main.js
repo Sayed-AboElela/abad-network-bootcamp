@@ -108,28 +108,31 @@ jQuery(document).ready(function ($) {
             const verticalArrowHalfHeight = 15.5; // 31px / 2 for vertical arrow
 
             // Calculate Edges (0.0 to 1.0) based on CSS rules
-            // Small Mobile (<480px): left: 45%, width: 90% -> Center 45%, Extent +/- 45% -> [0%, 90%]
-            // Mobile (<767px) Odd: left: 50%, width: 90% -> Center 50%, Extent +/- 45% -> [5%, 95%]
-            // Mobile (<767px) Even: left: 54%, width: 90% -> Center 54%, Extent +/- 45% -> [9%, 99%]
+            // Small Mobile (<480px):
+            //   Odd: left: 45%, width: 90% -> Center 45%, Extent +/- 45% -> [0%, 90%]
+            //   Even: left: 54%, width: 90% -> Center 54%, Extent +/- 45% -> [9%, 99%]
+            // Mobile (<767px):
+            //   Odd: left: 50%, width: 90% -> Center 50%, Extent +/- 45% -> [5%, 95%]
+            //   Even: left: 54%, width: 90% -> Center 54%, Extent +/- 45% -> [9%, 99%]
 
             let oddLeftEdge, oddRightEdge;
             let evenLeftEdge, evenRightEdge;
 
             if (isMobile) {
                 if (isSmallMobile) {
-                    // Both Odd and Even use the same rule on small mobile if not overridden?
-                    // User only specified .feature-item:after for 480px, implying it applies to all.
-                    oddLeftEdge = 0.00;
-                    oddRightEdge = 0.90;
-                    evenLeftEdge = 0.00;
-                    evenRightEdge = 0.90;
+                    // Odd Items: left 45%
+                    oddLeftEdge = 0.00;   // 45% - 45% = 0%
+                    oddRightEdge = 0.90;  // 45% + 45% = 90%
+                    // Even Items: left 54% (from 767px media query, still applies)
+                    evenLeftEdge = 0.09;  // 54% - 45% = 9%
+                    evenRightEdge = 0.99; // 54% + 45% = 99%
                 } else {
-                    // Odd Items
-                    oddLeftEdge = 0.05;
-                    oddRightEdge = 0.95;
-                    // Even Items
-                    evenLeftEdge = 0.09;
-                    evenRightEdge = 0.99;
+                    // Odd Items: left 50%
+                    oddLeftEdge = 0.05;   // 50% - 45% = 5%
+                    oddRightEdge = 0.95;  // 50% + 45% = 95%
+                    // Even Items: left 54%
+                    evenLeftEdge = 0.09;  // 54% - 45% = 9%
+                    evenRightEdge = 0.99; // 54% + 45% = 99%
                 }
             } else {
                 // Desktop - Fixed pixels
@@ -273,7 +276,10 @@ jQuery(document).ready(function ($) {
                 // Even Item, Right Edge
                 let arrow2X;
                 if (isMobile) {
-                    arrow2X = getX(true, true); // Even, Right Edge
+                    // Calculate the right edge position and add slight adjustment for even items
+                    arrow2X = getX(true, true);
+                    // Add offset to align perfectly with the border (compensate for 54% center position)
+                    arrow2X += itemWidth * 0.08;
                 } else {
                     // Desktop: Right side
                     // logic was: right: 76px
@@ -329,8 +335,8 @@ jQuery(document).ready(function ($) {
                 if (isMobile) {
                     // Right to Left
                     // Start at Even Right Edge, End at Even Left Edge
-                    startX = getX(true, true) + arrowHalfWidth;
-                    endX = getX(true, false) + arrowHalfWidth;
+                    startX = getX(true, true) + arrowHalfWidth + (itemWidth * 0.08);
+                    endX = getX(true, false) + arrowHalfWidth + (itemWidth * 0.08);
                     startY = item2Height - radius;
                 } else {
                     startX = itemWidth - 90;
