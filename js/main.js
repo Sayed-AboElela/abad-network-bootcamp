@@ -216,12 +216,12 @@ jQuery(document).ready(function ($) {
                     // Start after left curve, end before right curve
                     startX = getX(false, false) + arrowHalfWidth + radius;
                     endX = getX(false, true) + arrowHalfWidth - radius;
-                    startY = item1Height - radius; // On bottom border line
+                    startY = item1Height; // Center arrow on bottom border line
                 } else {
                     // Desktop
                     startX = 90 + radius;
                     endX = itemWidth - 90 - radius;
-                    startY = item1Height - radius;
+                    startY = item1Height; // Center arrow on bottom border line
                 }
 
                 const transStart = Date.now();
@@ -319,12 +319,12 @@ jQuery(document).ready(function ($) {
                     // Right to Left - include even item offset
                     startX = getX(true, true) + arrowHalfWidth + (itemWidth * 0.08) - radius;
                     endX = getX(true, false) + arrowHalfWidth + (itemWidth * 0.08) + radius;
-                    startY = item2Height - radius;
+                    startY = item2Height; // Center arrow on bottom border line
                 } else {
                     // Desktop: Right to Left
                     startX = itemWidth - 90 - radius;
                     endX = 90 + radius;
-                    startY = item2Height - radius;
+                    startY = item2Height; // Center arrow on bottom border line
                 }
 
                 const transStart = Date.now();
